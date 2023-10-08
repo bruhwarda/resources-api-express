@@ -4,23 +4,39 @@ const Joi = require("joi");
 const resourceSchema = Joi.object().keys({
   id: Joi.number().integer().min(1).required(),
   name: Joi.string().required(),
+  quantity: Joi.number().integer().min(1).required(),
 });
 module.exports = {
   getResources: (req, res) => {
-    const data = resourceService.getResources(req.body);
+    const data = resourceService.getResources();
     res.send(data);
   },
   getResourcesById: (req, res) => {
-    const data = resourceService.getResourcesById(req.body);
-    res.send(data);
+    const id = req.params.id;
+    const data = resourceService.getResourcesById(id);
+    if (data.error) {
+      res.status(404).send(data);
+    } else {
+      res.send(data);
+    }
   },
   updateResources: (req, res) => {
-    const data = resourceService.updateResources(req.body);
-    res.send(data);
+    const id = req.params.id;
+    const data = resourceService.updateResources(id, req.body);
+    if (data.error) {
+      res.status(404).send(data);
+    } else {
+      res.send(data);
+    }
   },
   deleteResources: (req, res) => {
-    const data = resourceService.deleteResources(req.body);
-    res.send(data);
+    const id = req.params.id;
+    const data = resourceService.deleteResources(id);
+    if (data.error) {
+      res.status(404).send(data);
+    } else {
+      res.send(data);
+    }
   },
   createResources: (req, res) => {
     try {
